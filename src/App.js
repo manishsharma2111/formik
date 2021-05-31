@@ -1,25 +1,46 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import ControlledAccordions from "./form";
+import {
+  CssBaseline,
+  createMuiTheme,
+  ThemeProvider,
+  Typography,
+  Grid,
+} from "@material-ui/core";
+
+const themes = createMuiTheme({
+  pallette: {
+    primary: {
+      main: "#333996",
+      light: "#3c44b126",
+    },
+    secondary: {
+      main: "#11cb5f",
+      light: "#f8324526",
+    },
+    background: {
+      default: "#f44336",
+    },
+  },
+});
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={themes}>
+      <Grid container directon="column" justify="center" spacing={2}>
+        <Grid item container justify="center">
+          <Typography variant="h3" color="primary">
+            Survey
+          </Typography>
+        </Grid>
+
+        <Grid item>
+          <ControlledAccordions />
+        </Grid>
+      </Grid>
+
+      <CssBaseline />
+    </ThemeProvider>
   );
 }
 
