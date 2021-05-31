@@ -1,26 +1,17 @@
 import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  AccordionActions,
   Button,
   Card,
   CardContent,
   CircularProgress,
   Grid,
   makeStyles,
-  Typography,
-  Divider,
-  IconButton,
 } from "@material-ui/core";
-import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import DeleteIcon from "@material-ui/icons/Delete";
-import { FieldArray, Form, Formik } from "formik";
-import Input from "./component/Input";
 
+import { Form, Formik } from "formik";
+import Input from "./component/Input";
+import useForm from "./hook/useForm";
+import FieldArrays from "./component/fieldArray";
 import React from "react";
-import * as yup from "yup";
 
 const useStyles = makeStyles((theme) => ({
   errorColor: {
@@ -46,50 +37,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const FORM_VALIDATION = yup.object().shape({
-  name: yup.string().required("Required"),
-  description: yup.string().required("Required"),
-  questions: yup.array().of(
-    yup.object().shape({
-      question: yup.string().required("Required"),
-      options: yup.array().of(
-        yup.object().shape({
-          correct: yup.string().required("Required"),
-          incorrect1: yup.string().required("Required"),
-          incorrect2: yup.string().required("Required"),
-          incorrect3: yup.string().required("Required"),
-        })
-      ),
-    })
-  ),
-});
-
-const emptyQuestion = {
-  question: "",
-  options: [{ correct: "", incorrect1: "", incorrect2: "", incorrect3: "" }],
-};
-const initialValues = {
-  name: "",
-  description: "",
-  questions: [emptyQuestion],
-};
-
 export default function ControlledAccordians() {
   const classes = useStyles();
+  const { FORM_VALIDATION, onSubmit, initialValues } = useForm();
 
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={FORM_VALIDATION}
-      onSubmit={async (values, { setSubmitting, resetForm }) => {
-        console.log("my values", values);
-        try {
-          await new Promise((res) => setTimeout(res, 2500));
-          resetForm();
-        } catch (error) {
-          setSubmitting(false);
-        }
-      }}
+      onSubmit={onSubmit}
     >
       {({ values, errors, isSubmitting }) => (
         <Form autoComplete="off">
@@ -114,103 +70,11 @@ export default function ControlledAccordians() {
               </CardContent>
             </Card>
 
-            <FieldArray name="questions">
-              {({ push, remove }) => (
-                <React.Fragment>
-                  {values.questions.map((_, index) => (
-                    <Grid
-                      direction="column"
-                      container
-                      item
-                      key={index}
-                      spacing={2}
-                      className={classes.card}
-                    >
-                      <Accordion>
-                        <AccordionSummary
-                          expandIcon={<ExpandMoreIcon />}
-                          aria-label="Expand"
-                        >
-                          <Input
-                            name={`questions.[${index}].question`}
-                            label="Question"
-                            style={{ paddingLeft: "5px" }}
-                          />
-                        </AccordionSummary>
-
-                        <AccordionDetails>
-                          <Grid container direction="column" spacing={2}>
-                            <Typography
-                              gutterBottom
-                              variant="h6"
-                              color="success"
-                            >
-                              Correct Option
-                            </Typography>
-                            <Grid container fullwidth>
-                              <Input
-                                className={classes.option}
-                                name={`questions.[${index}].options.[0].correct`}
-                                label="Correct"
-                              />
-                            </Grid>
-                            <Typography
-                              gutterBottom
-                              variant="h6"
-                              color="secondary"
-                            >
-                              Incorrect Options
-                            </Typography>
-                            <Grid container fullwidth>
-                              <Input
-                                className={classes.option}
-                                name={`questions.[${index}].options.[0].incorrect1`}
-                                label="Incorrect"
-                              />
-                            </Grid>
-
-                            <Input
-                              className={classes.option}
-                              name={`questions[${index}].options.[0].incorrect2`}
-                              label="Incorrect"
-                            />
-
-                            <Input
-                              className={classes.option}
-                              name={`questions[${index}].options.[0].incorrect3`}
-                              label="Incorrect"
-                            />
-                          </Grid>
-                        </AccordionDetails>
-                        <Divider />
-                        <Grid item>
-                          <AccordionActions>
-                            <IconButton
-                              style={{ fontSize: "40px", paddingRight: "20px" }}
-                              disabled={isSubmitting}
-                              onClick={() => remove(index)}
-                            >
-                              <DeleteIcon />
-                            </IconButton>
-                          </AccordionActions>
-                        </Grid>
-                      </Accordion>
-                    </Grid>
-                  ))}
-
-                  <Grid item container justify="flex-end">
-                    <IconButton>
-                      <AddOutlinedIcon
-                        disabled={isSubmitting}
-                        variant="contained"
-                        onClick={() => push(emptyQuestion)}
-                        style={{ fontSize: "40px" }}
-                      />
-                    </IconButton>
-                  </Grid>
-                </React.Fragment>
-              )}
-            </FieldArray>
+            <FieldArrays
+              values={values}
+              error={errors}
+              isSubmitting={isSubmitting}
+            />
 
             {/* <IconButton>
               <SaveIcon
