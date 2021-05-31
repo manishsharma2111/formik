@@ -16,7 +16,7 @@ const Input = ({ name, ...otherProps }) => {
     variant: "outlined",
   };
 
-  if (meta && meta.touched && meta.error) {
+  if (meta.touched && meta.error) {
     configTextfield.error = true;
     configTextfield.helperText = meta.error;
   }

@@ -68,22 +68,28 @@ const emptyQuestion = {
   question: "",
   options: [{ correct: "", incorrect1: "", incorrect2: "", incorrect3: "" }],
 };
+const initialValues = {
+  name: "",
+  description: "",
+
+  questions: [emptyQuestion],
+};
 
 export default function ControlledAccordians() {
   const classes = useStyles();
 
   return (
     <Formik
-      initialValues={{
-        name: "",
-        description: "",
-
-        questions: [emptyQuestion],
-      }}
+      initialValues={initialValues}
       validationSchema={FORM_VALIDATION}
-      onSubmit={async (values) => {
+      onSubmit={async (values, { setSubmitting, resetForm }) => {
         console.log("my values", values);
-        return new Promise((res) => setTimeout(res, 2500));
+        try {
+          await new Promise((res) => setTimeout(res, 2500));
+          resetForm();
+        } catch (error) {
+          setSubmitting(false);
+        }
       }}
     >
       {({ values, errors, isSubmitting }) => (
