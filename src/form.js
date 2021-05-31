@@ -69,7 +69,7 @@ const emptyQuestion = {
   options: [{ correct: "", incorrect1: "", incorrect2: "", incorrect3: "" }],
 };
 
-export default function Form() {
+export default function ControlledAccordions() {
   const classes = useStyles();
 
   return (
