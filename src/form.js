@@ -69,7 +69,7 @@ const emptyQuestion = {
   options: [{ correct: "", incorrect1: "", incorrect2: "", incorrect3: "" }],
 };
 
-export default function Home() {
+export default function Form() {
   const classes = useStyles();
 
   return (
