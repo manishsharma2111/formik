@@ -71,7 +71,6 @@ const emptyQuestion = {
 const initialValues = {
   name: "",
   description: "",
-
   questions: [emptyQuestion],
 };
 
